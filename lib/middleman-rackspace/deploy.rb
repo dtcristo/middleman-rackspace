@@ -1,10 +1,13 @@
 module Middleman
   module Rackspace
-    def self.deploy
+    module_function
+
+    def deploy(app)
+      p app
       puts 'Deploying.......'
     end
 
-    def self.script
+    def script
       require 'fog'
       require 'typhoeus'
 
