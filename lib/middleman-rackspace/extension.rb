@@ -7,7 +7,7 @@ module Middleman
       attr_accessor :options
     end
 
-    class Extension < ::Middleman::Extension
+    class Extension < Middleman::Extension
       option :foo, '************ DEFAULT *************', 'An example option'
       option :rackspace_username, ENV['RACKSPACE_USERNAME'], 'Rackspace username'
       option :rackspace_api_key, ENV['RACKSPACE_API_KEY'], 'Rackspace API key'
@@ -31,7 +31,7 @@ module Middleman
 
       def after_configuration
         puts "#{options.foo}... after_configuration"
-        ::Middleman::Rackspace.options = options
+        Middleman::Rackspace.options = options
       end
     end
   end

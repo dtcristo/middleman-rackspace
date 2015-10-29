@@ -10,12 +10,6 @@ module Middleman
 
       namespace :rackspace
 
-      class_option :environment,
-                   aliases: '-e',
-                   type: :string,
-                   default: ENV['MM_ENV'] || ENV['RACK_ENV'] || 'production',
-                   desc: 'The environment to deploy'
-
       class_option :build,
                    aliases: '-b',
                    type: :boolean,
@@ -28,13 +22,9 @@ module Middleman
       end
 
       def rackspace
-        # @app = ::Middleman::Application.server.inst
-        ::Middleman::Application.server.inst
-
-        p config_options
-
+        app = Middleman::Application.server.inst
         build(options)
-        ::Middleman::Rackspace.deploy
+        Middleman::Rackspace.deploy(app)
       end
 
       protected
@@ -43,8 +33,7 @@ module Middleman
         build_enabled = cli_options.fetch('build', config_options.build)
 
         if build_enabled
-          puts 'building before'
-          run("middleman build -e #{cli_options['environment']}") || exit(1)
+          run('middleman build') || exit(1)
         end
       end
 
@@ -66,7 +55,7 @@ module Middleman
         options = nil
 
         begin
-          options = ::Middleman::Rackspace.options
+          options = Middleman::Rackspace.options
         rescue NoMethodError
           print_usage_and_die 'You need to activate the rackspace extension in config.rb'
         end
