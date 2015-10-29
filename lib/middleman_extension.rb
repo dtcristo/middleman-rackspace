@@ -1,1 +1,1 @@
-require 'middleman/rackspace'
+require 'middleman-rackspace'
