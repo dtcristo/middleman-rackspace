@@ -1,9 +1,8 @@
-# Require core library
 require 'middleman-core'
 
 module Middleman
   module Rackspace
-    @options
+    # @options
     class << self
       attr_accessor :options
     end
@@ -24,7 +23,7 @@ module Middleman
       option :error_file, '.html', 'Error filename configuration'
       # 401.html
       # 404.html
-      option :after_build, false, 'Deploy after build'
+      option :build, false, 'Build before deploy'
 
       def initialize(app, options_hash={}, &block)
         super
@@ -34,19 +33,6 @@ module Middleman
         puts "#{options.foo}... after_configuration"
         ::Middleman::Rackspace.options = options
       end
-
-      def after_build
-        ::Middleman::Rackspace.deploy if options.after_build
-      end
-
-      # A Sitemap Manipulator
-      # def manipulate_resource_list(resources)
-      # end
-
-      # helpers do
-      #   def a_helper
-      #   end
-      # end
     end
   end
 end
