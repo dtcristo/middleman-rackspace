@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'middleman/rackspace/version'
+require 'middleman-rackspace/pkg-info'
 
 Gem::Specification.new do |s|
-  s.name        = 'middleman-rackspace'
+  s.name        = Middleman::Rackspace::PACKAGE
   s.version     = Middleman::Rackspace::VERSION
   s.authors     = ['David Cristofaro']
   s.homepage    = 'https://github.com/dtcristo/middleman-rackspace'
-  s.summary     = %q{Deploy your Middleman site to Rackspace Cloud Files}
+  s.summary     = Middleman::Rackspace::TAGLINE
   s.license     = 'MIT'
 
   s.files         = `git ls-files`.split("\n")
