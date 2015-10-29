@@ -1,4 +1,4 @@
-require 'middleman-cli'
+require 'middleman-core/cli'
 
 module Middleman
   module Cli
@@ -12,25 +12,14 @@ module Middleman
 
       class_option :environment,
                    aliases: '-e',
-                   default: ENV['MM_ENV'] || ENV['RACK_ENV'] || 'production',
-                   desc: 'The environment Middleman will run under'
-
-      class_option :verbose,
-                   aliases: '-v',
-                   type: :boolean,
-                   default: false,
-                   desc: 'Print debug messages'
-
-      class_option :instrument,
-                   aliases: '-i',
                    type: :string,
-                   default: false,
-                   desc: 'Print instrument messages'
+                   default: ENV['MM_ENV'] || ENV['RACK_ENV'] || 'production',
+                   desc: 'The environment to deploy'
 
-      class_option :build_before,
+      class_option :build,
                    aliases: '-b',
                    type: :boolean,
-                   default: false,
+                   #default: false,
                    desc: 'Run `middleman build` before the deploy step'
 
       # Tell Thor to exit with a non-zero exit code on failure
@@ -39,29 +28,25 @@ module Middleman
       end
 
       def rackspace
-        env = options['environment'] ? :production : options['environment'].to_s.to_sym
-        verbose = options['verbose'] ? 0 : 1
-        instrument = options['instrument']
+        # @app = ::Middleman::Application.server.inst
+        ::Middleman::Application.server.inst
 
-        @app = ::Middleman::Application.new do
-          config[:mode] = :build
-          config[:environment] = env
-          ::Middleman::Logger.singleton(verbose, instrument)
-        end
-        # build_before(options)
+        p config_options
+
+        build(options)
         ::Middleman::Rackspace.deploy
       end
 
       protected
 
-      # def build_before(options = {})
-      #   build_enabled = options.fetch('build_before', deploy_options.build_before)
-      #
-      #   if build_enabled
-      #     # http://forum.middlemanapp.com/t/problem-with-the-build-task-in-an-extension
-      #     run("middleman build -e #{options['environment']}") || exit(1)
-      #   end
-      # end
+      def build(cli_options = {})
+        build_enabled = cli_options.fetch('build', config_options.build)
+
+        if build_enabled
+          puts 'building before'
+          run("middleman build -e #{cli_options['environment']}") || exit(1)
+        end
+      end
 
       def print_usage_and_die(message)
         fail StandardError, "ERROR: #{message}"
@@ -76,7 +61,8 @@ module Middleman
       #   method_instance.process
       # end
 
-      def rackspace_options
+      def config_options
+        puts 'getting config options'
         options = nil
 
         begin
@@ -85,21 +71,7 @@ module Middleman
           print_usage_and_die 'You need to activate the rackspace extension in config.rb'
         end
 
-        # unless options.deploy_method
-        #   print_usage_and_die 'The deploy extension requires you to set a method.'
-        # end
-        #
-        # case options.deploy_method
-        # when :rsync, :sftp
-        #   unless options.host && options.path
-        #     print_usage_and_die "The #{options.deploy_method} method requires host and path to be set."
-        #   end
-        # when :ftp
-        #   unless options.host && options.user && options.password && options.path
-        #     print_usage_and_die 'The ftp deploy method requires host, path, user, and password to be set.'
-        #   end
-        # end
-
+        puts "getting config options... #{options.class}"
         options
       end
     end

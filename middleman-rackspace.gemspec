@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_path  = 'lib'
 
-  s.add_runtime_dependency 'middleman-core', '>= 3.4.0'
+  s.add_runtime_dependency 'middleman-core', '~> 3.4.0'
   s.add_runtime_dependency 'fog', '~> 1.35.0'
   s.add_runtime_dependency 'typhoeus', '~> 0.8.0'
 end
