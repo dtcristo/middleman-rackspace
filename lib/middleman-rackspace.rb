@@ -4,6 +4,6 @@ require 'middleman-rackspace/deploy'
 require 'middleman-rackspace/cli'
 require 'middleman-rackspace/extension'
 
-::Middleman::Extensions.register(:rackspace) do
-  ::Middleman::Rackspace::Extension
+Middleman::Extensions.register(:rackspace) do
+  Middleman::Rackspace::Extension
 end
