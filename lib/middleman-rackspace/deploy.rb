@@ -1,15 +1,14 @@
+require 'fog'
+require 'typhoeus'
+
 module Middleman
   module Rackspace
     module_function
 
     def deploy(app)
-      p app
-      puts 'Deploying.......'
-    end
-
-    def script
-      require 'fog'
-      require 'typhoeus'
+      puts 'Hello'
+      config = app.extensions[:rackspace].options
+      container_name = config.container_name
 
       # build_TIMESTAMP.tar.gz
       archive_name = "build_#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.tar.gz"
@@ -18,15 +17,14 @@ module Middleman
       # Compress /build directory into build_TIMESTAMP.tar.gz
       system("cd #{File.dirname(__FILE__)}/build && tar -zcvf ../#{archive_name} .")
 
+      # Configure Fog
       service = Fog::Storage.new({
           provider:           'Rackspace',
-          rackspace_username: 'username',
-          rackspace_api_key:  'api_key',
-          rackspace_region:   :syd,
+          rackspace_username: config.rackspace_username,
+          rackspace_api_key:  config.rackspace_api_key,
+          rackspace_region:   config.rackspace_region,
           connection_options: {}
       })
-
-      container_name = 'container'
 
       # Get or create container
       root_directory = service.directories.get(container_name)
@@ -38,9 +36,8 @@ module Middleman
         # https://developer.rackspace.com/docs/cloud-files/v1/developer-guide/#create-a-static-website
         Typhoeus.post("#{service.endpoint_uri.to_s}/#{container_name}",
                       headers: {'X-Auth-Token' => service.send(:auth_token),
-                                'X-Container-Meta-Web-Index' => 'index.html',
-                                # Translates to 401.html and 404.html
-                                'X-Container-Meta-Web-Error' => '.html'})
+                                'X-Container-Meta-Web-Index' => config.index_file,
+                                'X-Container-Meta-Web-Error' => config.error_file_prefix})
       end
 
       puts "Updating container: #{root_directory.key}"
