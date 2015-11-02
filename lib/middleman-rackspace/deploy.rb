@@ -6,7 +6,6 @@ module Middleman
     module_function
 
     def deploy(app)
-      puts 'Hello'
       config = app.extensions[:rackspace].options
       container_name = config.container_name
 
@@ -15,7 +14,7 @@ module Middleman
       puts "Creating archive: #{archive_name}"
 
       # Compress /build directory into build_TIMESTAMP.tar.gz
-      system("cd #{File.dirname(__FILE__)}/build && tar -zcvf ../#{archive_name} .")
+      system("cd ./build && tar -zcvf ../#{archive_name} .")
 
       # Configure Fog
       service = Fog::Storage.new({
@@ -44,8 +43,7 @@ module Middleman
 
       # Upload and extract tar.gz on Rackspace
       # https://developer.rackspace.com/docs/cloud-files/v1/developer-guide/#extracting-archive-files
-      archive_file = File.join(File.dirname(__FILE__), archive_name)
-      service.extract_archive(container_name, File.open(archive_file, 'r'), 'tar.gz')
+      service.extract_archive(container_name, File.open(archive_name, 'r'), 'tar.gz')
 
       puts "Website live at: #{root_directory.public_url}"
     end
