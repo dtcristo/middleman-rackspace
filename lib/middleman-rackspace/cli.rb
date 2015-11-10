@@ -2,12 +2,14 @@ require 'middleman-core/cli'
 
 module Middleman
   module Cli
-    class Rackspace < Thor::Group
+    class Rackspace < Thor
       include Thor::Actions
 
       check_unknown_options!
 
       namespace :rackspace
+
+      desc 'rackspace ENVIRONMENT [options]', 'Deploy to Rackspace container for ENVIRONMENT'
 
       class_option :build_before,
                    aliases: '-b',
@@ -20,7 +22,11 @@ module Middleman
         true
       end
 
-      def rackspace
+      def rackspace(environment)
+        unless environment == 'staging' || environment == 'production'
+          raise Thor::Error, "Unknown environment '#{environment}'. Use 'staging' or 'production'."
+        end
+
         # Instantiate Middleman and load config
         app = Middleman::Application.server.inst
 
@@ -31,11 +37,8 @@ module Middleman
         end
 
         # Deploy the built website
-        Middleman::Rackspace.deploy(app)
+        Middleman::Rackspace.deploy(app, environment)
       end
     end
-
-    # Register 'rackspace' as a Middleman CLI extention
-    Base.register(Middleman::Cli::Rackspace, 'rackspace', 'rackspace [options]', Middleman::Rackspace::TAGLINE)
   end
 end
