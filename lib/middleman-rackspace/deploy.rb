@@ -5,15 +5,23 @@ module Middleman
   module Rackspace
     module_function
 
-    def deploy(app)
+    def deploy(app, environment)
       config = app.extensions[:rackspace].options
-      container_name = config.container_name
 
-      # build_TIMESTAMP.tar.gz
-      archive_name = "build_#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.tar.gz"
+      container_name = case environment
+                       when 'staging'
+                         config.container_staging
+                       when 'production'
+                         config.container_production
+                       end
+
+      puts "Deploying for #{environment} to '#{container_name}'"
+
+      # build_ENVIRONMENT_TIMESTAMP.tar.gz
+      archive_name = "build_#{environment}_#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.tar.gz"
       puts "Creating archive: #{archive_name}"
 
-      # Compress /build directory into build_TIMESTAMP.tar.gz
+      # Compress /build directory into build_ENVIRONMENT_TIMESTAMP.tar.gz
       system("cd ./build && tar -zcvf ../#{archive_name} .")
 
       # Configure Fog
