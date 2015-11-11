@@ -15,11 +15,13 @@ module Middleman
                          config.container_production
                        end
 
+      puts ''
       puts "Deploying for #{environment} to '#{container_name}'"
 
       # build_ENVIRONMENT_TIMESTAMP.tar.gz
       archive_name = "build_#{environment}_#{Time.now.strftime('%Y-%m-%d_%H-%M-%S')}.tar.gz"
-      puts "Creating archive: #{archive_name}"
+      puts ''
+      puts "Creating archive '#{archive_name}'"
 
       # Compress /build directory into build_ENVIRONMENT_TIMESTAMP.tar.gz
       system("cd ./build && tar -zcvf ../#{archive_name} .")
@@ -36,7 +38,8 @@ module Middleman
       # Get or create container
       root_directory = service.directories.get(container_name)
       unless root_directory
-        puts "Creating container: #{container_name}"
+        puts ''
+        puts "Creating container '#{container_name}'"
         # Create the new container
         root_directory = service.directories.create(key: container_name, public: true)
         # Configure container for static site hosting
@@ -47,13 +50,16 @@ module Middleman
                                 'X-Container-Meta-Web-Error' => config.error_file_prefix})
       end
 
-      puts "Updating container: #{root_directory.key}"
+      puts ''
+      puts "Updating container '#{root_directory.key}'"
 
       # Upload and extract tar.gz on Rackspace
       # https://developer.rackspace.com/docs/cloud-files/v1/developer-guide/#extracting-archive-files
       service.extract_archive(container_name, File.open(archive_name, 'r'), 'tar.gz')
 
-      puts "Website live at: #{root_directory.public_url}"
+      puts ''
+      puts "Site is live at: #{root_directory.public_url}"
+      puts ''
     end
   end
 end
