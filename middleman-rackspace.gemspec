@@ -6,7 +6,7 @@ require 'middleman-rackspace/pkg-info'
 Gem::Specification.new do |s|
   s.name        = Middleman::Rackspace::PACKAGE
   s.version     = Middleman::Rackspace::VERSION
-  s.authors     = ['David Cristofaro']
+  s.author      = 'David Cristofaro'
   s.homepage    = 'https://github.com/dtcristo/middleman-rackspace'
   s.summary     = Middleman::Rackspace::TAGLINE
   s.license     = 'MIT'
@@ -15,6 +15,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_path  = 'lib'
+
+  s.required_ruby_version = '~> 2.0'
 
   s.add_runtime_dependency 'middleman-core', '~> 3.4'
   s.add_runtime_dependency 'fog', '~> 1.35'
