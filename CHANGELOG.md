@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (2015-11-10)
+## 0.3.0 (2015-11-12)
 
 * Add support to checkout git branch before build.
 * Clean up console logging.
