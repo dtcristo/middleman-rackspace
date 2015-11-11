@@ -26,7 +26,16 @@ An archive `build_ENVIRONMENT_TIMESTAMP.tar.gz` is created for your current buil
 
 ## Git support
 
-To enable git support, set `config.git` to `true` pass `--git` on the CLI.
+To enable git support, set `config.git` to `true` or pass `--git` on the CLI. When enabled, the `middleman rackspace` command will automatically switch to the git branch corresponding to the environment you are deploying.
+
+Default branch mappings:
+
+  * `staging` environment maps to `staging` branch.
+  * `production` environment maps to `master` branch.
+
+Both of these can be changed in the configuration.
+
+The git support will automatically stash any changes you have in your working tree before switching branch. After a successful build and deploy, these changes will be restored.
 
 ## Configuration
 
@@ -78,6 +87,5 @@ For a list of available regions see [http://www.rackspace.com/knowledge_center/a
 
 * On deploy, delete files on the server that have been removed from the build.
 * Invalidate cache after deploy.
-* Integrate with git to deploy from a branch.
 * Improve CLI to deploy from a pre-built `build_ENVIRONMENT_TIMESTAMP.tar.gz`.
 * Improve error handling.
