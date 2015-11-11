@@ -10,8 +10,8 @@ module Middleman
       option :container_production, nil, 'The target Rackspace container for production'
       option :branch_staging, 'staging', 'Git branch for staging'
       option :branch_production, 'master', 'Git branch for production'
-      option :checkout_branch, false, 'Checkout environment branch before the build/deploy step'
-      option :build_before, false, 'Run `middleman build` before the deploy step'
+      option :git, false, 'Checkout environment branch before the build/deploy step'
+      option :build, false, 'Run `middleman build` before the deploy step'
       option :index_file, 'index.html', 'Index filename configuration'
       option :error_file_prefix, '.html', 'Error filename configuration'
 

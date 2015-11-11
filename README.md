@@ -24,6 +24,10 @@ $ middleman rackspace staging
 
 An archive `build_ENVIRONMENT_TIMESTAMP.tar.gz` is created for your current build and pushed to Rackspace. A new container will automatically be configured on the specified region. If there is an existing container with the same name, **data will be overwritten**.
 
+## Git support
+
+To enable git support, set `config.git` to `true` pass `--git` on the CLI.
+
 ## Configuration
 
 Activate and configure middleman-rackspace by adding an `activate :rackspace` block to `config.rb`. For example:
@@ -36,8 +40,8 @@ activate :rackspace do |config|
   config.rackspace_region     = :syd
   config.container_staging    = 'example-container-staging'
   config.container_production = 'example-container'
-  config.checkout_branch      = true
-  config.build_before         = true
+  config.git                  = true
+  config.build                = true
 end
 ```
 
@@ -58,9 +62,9 @@ activate :rackspace do |config|
   config.branch_staging       = 'staging'
   config.branch_production    = 'master'
   # Checkout environment branch before the build/deploy step
-  config.checkout_branch      = false
+  config.git                  = false
   # Run `middleman build` before the deploy step
-  config.build_before         = false
+  config.build                = false
   # Root page filename
   config.index_file           = 'index.html'
   # Error page filename prefix, translates to 401.html and 404.html
