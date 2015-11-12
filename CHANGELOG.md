@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 (2015-11-12)
+
+* Remove verbose logging on archive creation.
+
 ## 0.3.0 (2015-11-12)
 
 * Add support to checkout git branch before build.

@@ -21,7 +21,7 @@ module Middleman
       puts "Creating archive '#{archive_name}'."
 
       # Compress /build directory into build_ENVIRONMENT_TIMESTAMP.tar.gz
-      system("cd ./build && tar -zcvf ../#{archive_name} .")
+      system("cd ./build && tar -zcf ../#{archive_name} .")
 
       # Configure Fog
       service = Fog::Storage.new({
